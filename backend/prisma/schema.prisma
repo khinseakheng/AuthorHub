@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  email    String @unique
+  name     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Many-to-many relationship with groups
+  userGroups UserGroup[]
+  
+  @@map("users")
+}
+
+model Group {
+  id          Int      @id @default(autoincrement())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Many-to-many relationship with users
+  userGroups UserGroup[]
+  
+  // One-to-many relationship with permissions
+  permissions Permission[]
+  
+  @@map("groups")
+}
+
+model UserGroup {
+  id      Int @id @default(autoincrement())
+  userId  Int
+  groupId Int
+  
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, groupId])
+  @@map("user_groups")
+}
+
+model Resource {
+  id          Int      @id @default(autoincrement())
+  key         String   @unique
+  name        String?
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // One-to-many relationship with permissions
+  permissions Permission[]
+  
+  @@map("resources")
+}
+
+model Permission {
+  id         Int     @id @default(autoincrement())
+  groupId    Int
+  resourceId Int
+  canRead    Boolean @default(false)
+  canCreate  Boolean @default(false)
+  canUpdate  Boolean @default(false)
+  canDelete  Boolean @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  group    Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  resource Resource @relation(fields: [resourceId], references: [id], onDelete: Cascade)
+  
+  @@unique([groupId, resourceId])
+  @@map("permissions")
+}

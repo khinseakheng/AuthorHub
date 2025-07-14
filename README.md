@@ -140,31 +140,90 @@ Response:
 
 ## 🚦 Getting Started
 
-### Backend
+### Quick Setup (Recommended)
 
+**Unix/Linux/macOS:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+**Windows:**
+```cmd
+setup.bat
+```
+
+### Manual Setup
+
+#### Backend
 ```bash
 cd backend
 cp .env.example .env
 npm install
+npx prisma generate
 npx prisma migrate dev --name init
 npm run dev
 ```
 
+#### Frontend
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### Access the Application
+- **Frontend (Admin Portal):** http://localhost:3000
+- **Backend API:** http://localhost:3001
+- **API Documentation:** http://localhost:3001/api-docs
+
+### Docker Deployment
+```bash
+docker-compose up --build
+```
+
+---
+
+## 📁 Project Structure
+
+```
+AuthorHub/
+├── backend/                 # Express.js TypeScript API
+│   ├── src/
+│   │   ├── routes/         # API route handlers
+│   │   ├── schemas/        # Zod validation schemas
+│   │   ├── config/         # Swagger and app config
+│   │   └── lib/           # Prisma client and utilities
+│   ├── prisma/            # Database schema and migrations
+│   └── package.json
+├── frontend/              # React TypeScript admin interface
+│   ├── src/
+│   │   ├── components/    # Reusable UI components
+│   │   ├── pages/         # Main application pages
+│   │   └── services/      # API service layer
+│   └── package.json
+├── docker-compose.yml     # Docker deployment setup
+├── setup.sh / setup.bat   # Automated setup scripts
+└── DEVELOPMENT.md         # Detailed development guide
+```
+
+---
+
 ---
 
 ## 🔮 Future Features
-  - frontend web portal can let user easy to operate
-  - SDKs for popular languages (Node.js, Python, Java, C#, PHP)
-  - SSO/OAuth integration (backend)
-  - Multi-tenancy support (backend)
-  - Audit logging/history
-  - User self-service endpoints
-  - JWT/stateless permission checks
-  - Hierarchical/wildcard resource permissions
-  - Config export/import (JSON/YAML)
-  - Notifications for permission changes (backend)
-  - GraphQL API option
-  - Internationalization (i18n)
+- ✅ **Frontend web portal** - Complete React admin interface
+- SDKs for popular languages (Node.js, Python, Java, C#, PHP)
+- SSO/OAuth integration (backend)
+- Multi-tenancy support (backend)
+- Audit logging/history
+- User self-service endpoints
+- JWT/stateless permission checks
+- Hierarchical/wildcard resource permissions
+- Config export/import (JSON/YAML)
+- Notifications for permission changes (backend)
+- GraphQL API option
+- Internationalization (i18n)
 
 ---
 
