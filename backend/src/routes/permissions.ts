@@ -285,6 +285,56 @@ router.get('/user/:user_id', async (req: any, res: any) => {
 /**
  * @swagger
  * /api/permissions/groups/{groupId}:
+ *   get:
+ *     summary: Get all permissions for a group
+ *     tags: [Permissions]
+ *     parameters:
+ *       - in: path
+ *         name: groupId
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: Group ID
+ *     responses:
+ *       200:
+ *         description: Group permissions retrieved successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Permission'
+ *       404:
+ *         description: Group not found
+ */
+// Get permissions for a group
+router.get('/groups/:groupId', async (req: any, res: any) => {
+  try {
+    const groupId = parseInt(req.params.groupId);
+    
+    // Check if group exists
+    const group = await prisma.group.findUnique({ where: { id: groupId } });
+    if (!group) {
+      return res.status(404).json({ error: 'Group not found' });
+    }
+    
+    const permissions = await prisma.permission.findMany({
+      where: { groupId },
+      include: {
+        group: true,
+        resource: true
+      }
+    });
+    
+    res.json(permissions);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch group permissions' });
+  }
+});
+
+/**
+ * @swagger
+ * /api/permissions/groups/{groupId}:
  *   post:
  *     summary: Create permission for a group
  *     tags: [Permissions]
