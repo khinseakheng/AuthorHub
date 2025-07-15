@@ -1,30 +1,27 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { Toaster } from 'react-hot-toast';
-import Layout from './components/Layout';
-import Dashboard from './pages/Dashboard';
-import Users from './pages/Users';
-import Groups from './pages/Groups';
-import Resources from './pages/Resources';
-import Permissions from './pages/Permissions';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import { DashboardPage } from './pages/DashboardPage';
+import { UsersPage } from './pages/UsersPage';
+import { GroupsPage } from './pages/GroupsPage';
+import { ResourcesPage } from './pages/ResourcesPage';
+import { PermissionsPage } from './pages/PermissionsPage';
+import './index.css';
 
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Toaster position="top-right" />
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/groups" element={<Groups />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/permissions" element={<Permissions />} />
-          </Routes>
-        </Layout>
-      </div>
+      <Navbar />
+      <Routes>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/users" element={<UsersPage />} />
+        <Route path="/groups" element={<GroupsPage />} />
+        <Route path="/resources" element={<ResourcesPage />} />
+        <Route path="/permissions" element={<PermissionsPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
