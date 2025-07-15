@@ -21,7 +21,10 @@ const PORT = process.env.PORT || 3001;
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000'
+  origin: process.env.NODE_ENV === 'development' 
+    ? ['http://localhost:3000', 'http://localhost:5173', 'http://localhost:3001']
+    : process.env.CORS_ORIGIN || 'http://localhost:3000',
+  credentials: true
 }));
 app.use(morgan('combined'));
 app.use(express.json());
